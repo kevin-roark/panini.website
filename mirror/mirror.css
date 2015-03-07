@@ -1,0 +1,15 @@
+
+
+.glow-circle {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 300px;
+  height: 300px;
+  margin-left: -150px;
+  margin-top: -150px;
+  border-radius: 150px;
+
+  background-color: transparent;
+  border: 3px solid white;
+}
