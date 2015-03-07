@@ -47,7 +47,20 @@ function main() {
 
   function startMirror() {
     startedMirror = true;
-    console.log('mirror time!');
+
+    Webcam.set({
+      width: window.innerWidth,
+      height: window.innerHeight,
+      dest_width: 640,
+      dest_height: 480,
+    });
+    Webcam.attach('#mirror');
+
+    Webcam.on('live', function() {
+      setTimeout(function() {
+        $('#mirror').fadeIn(1200);
+      }, 666);
+    });
   }
 }
 
