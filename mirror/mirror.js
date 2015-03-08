@@ -7,7 +7,27 @@ function main() {
   var MAX_COUNT = 300;
 
   var startedMirror = false;
+  var mirrorError = false;
   var intervalAction = null;
+
+  Webcam.set({
+    width: window.innerWidth,
+    height: window.innerHeight,
+    dest_width: 640,
+    dest_height: 480,
+  });
+  Webcam.on('error', function(err) {
+    mirrorError = true;
+    if (startedMirror) {
+      showError();
+    }
+  });
+  Webcam.on('live', function() {
+    if (mirrorError) {
+      hideError();
+    }
+  });
+  Webcam.attach('#mirror');
 
   circle.mouseenter(function() {
     intervalAction = 'increment';
@@ -48,19 +68,18 @@ function main() {
   function startMirror() {
     startedMirror = true;
 
-    Webcam.set({
-      width: window.innerWidth,
-      height: window.innerHeight,
-      dest_width: 640,
-      dest_height: 480,
-    });
-    Webcam.attach('#mirror');
+    $('#mirror').fadeIn(1200);
+    if (mirrorError) {
+      showError();
+    }
+  }
 
-    Webcam.on('live', function() {
-      setTimeout(function() {
-        $('#mirror').fadeIn(1200);
-      }, 666);
-    });
+  function showError() {
+    $('.mirror-error').show();
+  }
+
+  function hideError() {
+    $('.mirror-error').hide();
   }
 }
 

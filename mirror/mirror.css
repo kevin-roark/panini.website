@@ -46,3 +46,23 @@ body {
   height: 100%;
   display: none;
 }
+
+.mirror-error {
+  z-index: 2;
+  display: none;
+  position: absolute;
+  height: 60px;
+  line-height: 60px;
+  top: 50%;
+  margin-top: -30px;
+  width: 430px;
+  left: 50%;
+  margin-left: -215px;
+
+  text-align: center;
+  color: #e91f1f;
+  background-color: white;
+  font-size: 22px;
+  font-style: italic;
+  text-decoration: underline;
+}
