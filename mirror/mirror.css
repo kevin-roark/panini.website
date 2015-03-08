@@ -66,3 +66,35 @@ body {
   font-style: italic;
   text-decoration: underline;
 }
+
+.info-text {
+  z-index: 10000;
+  position: absolute;
+  padding: 5px;
+  display: none;
+}
+.info-text p {
+  margin: 4px 0px;
+}
+
+.event-info {
+  top: 0px;
+  right: 0px;
+
+  font-family: Monospace;
+  font-size: 14px;
+  color: #f2f514;
+}
+
+.panini-info {
+  top: 0px;
+  left: 0px;
+
+  font-family: sans-serif;
+  font-size: 14px;
+  color: #f11042;
+}
+.panini-info p {
+  padding: 4px;
+  background-color: #7cff78;
+}
