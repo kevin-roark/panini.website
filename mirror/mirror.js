@@ -8,6 +8,7 @@ function main() {
 
   var startedMirror = false;
   var mirrorError = false;
+  var mirrorLive = false;
   var intervalAction = null;
 
   Webcam.set({
@@ -23,8 +24,12 @@ function main() {
     }
   });
   Webcam.on('live', function() {
+    mirrorLive = true;
     if (mirrorError) {
       hideError();
+    }
+    if (startedMirror) {
+      startMirror();
     }
   });
   Webcam.attach('#mirror');
@@ -91,10 +96,14 @@ function main() {
   function startMirror() {
     startedMirror = true;
 
-    $('#mirror').fadeIn(1200);
+    if (mirrorLive) {
+      $('#mirror').fadeIn(1200);
+    }
     if (mirrorError) {
       showError();
     }
+
+    $('.info-text').fadeIn(1200);
   }
 
   function showError() {
