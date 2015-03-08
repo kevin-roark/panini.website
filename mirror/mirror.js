@@ -31,10 +31,32 @@ function main() {
 
   circle.mouseenter(function() {
     intervalAction = 'increment';
+    buzz.play({
+      pitch : 60,
+      env: {
+        hold: 1000,
+        release: 0.75,
+        attack: 0.5
+      }
+    });
   });
 
   circle.mouseleave(function() {
     intervalAction = 'decrement';
+    buzz.stop();
+  });
+
+  var buzz = new Wad({
+    source : 'triangle',
+    filter : {
+      type : 'lowpass',
+      frequency : 800,
+      q : 8.5,
+      env : {
+        attack : 0.2,
+        frequency : 600
+      }
+    }
   });
 
   var incrementInterval = setInterval(function() {
@@ -49,6 +71,7 @@ function main() {
 
     if (innerCount >= MAX_COUNT) {
       clearInterval(incrementInterval);
+      buzz.stop();
       startMirror();
     }
   }, 10);
