@@ -1,0 +1,27 @@
+
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.info-text {
+  z-index: 10000;
+  position: absolute;
+  padding: 5px;
+  display: none;
+}
+.info-text p {
+  margin: 4px 0px;
+}
+
+.event-info {
+  top: 0px;
+  right: 0px;
+
+  font-family: Monospace;
+  font-size: 14px;
+  color: #f2f514;
+}
