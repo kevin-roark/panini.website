@@ -19,12 +19,16 @@ $(function() {
 
   var scene = new THREE.Scene();
 
-  var camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.1, 3000);
-  camera.position.y = 5;
+  var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 3000);
   scene.add(camera);
 
-  var ambientLight = new THREE.AmbientLight(0x404040);
+  var ambientLight = new THREE.AmbientLight(0xffffff);
   scene.add(ambientLight);
+
+  var directionalLight = new THREE.DirectionalLight(0xffffff);
+  directionalLight.intensity = 0.5;
+  directionalLight.position.set(0, 10, 0);
+  scene.add(directionalLight);
 
   var loader = new THREE.JSONLoader();
 
@@ -33,17 +37,18 @@ $(function() {
 
   var models = [
     //'./models/bread.json',
-    //'./models/martini.json',
-    './models/rootbeer.json'
-    //'./models/turkeyleg.json'
+    './models/martini.json',
+    //'./models/rootbeer.json',
+    './models/turkeyleg.json'
   ];
   var modelCache = {};
 
   var raindrops = [];
+  var groundlings = [];
 
   setInterval(function() {
     addRaindrop();
-  }, 940);
+  }, 200);
 
   render();
 
@@ -61,7 +66,7 @@ $(function() {
       if (raindrop.userData.raining) {
         raindrop.position.y -= raindrop.userData.rainSpeed;
 
-        if (raindrop.position.y <= -10) {
+        if (raindrop.position.y <= -5) {
           raindrop.userData.raining = false;
         }
       }
@@ -75,20 +80,25 @@ $(function() {
     console.log(model);
 
     loadModel(model, function(geometry, material) {
-      var mesh = new THREE.SkinnedMesh(geometry, material);
+      var mesh = new THREE.Mesh(geometry, material);
       scene.add(mesh);
 
-      mesh.position.x = kt.randInt(-30, 30);
-      mesh.position.y = kt.randInt(18, 30);
-      mesh.position.z = -1 * kt.randInt(20, 50);
+      mesh.position.x = kt.randInt(-12, 12);
+      mesh.position.y = kt.randInt(15, 20);
+      mesh.position.z = -1 * kt.randInt(19, 30);
 
       mesh.userData.raining = true;
       mesh.userData.rainSpeed = Math.random() * 0.12 + 0.02;
 
       raindrops.push(mesh);
-      if (raindrops.length > 50) {
+      if (raindrops.length > 60) {
         var oldMesh = raindrops.shift();
-        scene.remove(oldMesh);
+
+        groundlings.push(oldMesh);
+        if (groundlings.length > 250) {
+          var finishedMesh = groundlings.shift();
+          scene.remove(finishedMesh);
+        }
       }
     });
   }
