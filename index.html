@@ -5,7 +5,11 @@
 </head>
 <body>
     <script>
-      window.location = '/mirror';
+      if (Math.random() <= 0.5) {
+        window.location = '/mirror';
+      } else {
+        window.location = '/panini';
+      }
     </script>
 </body>
 </html>
