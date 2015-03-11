@@ -71,6 +71,27 @@ $(function() {
   particleGroup.addEmitter(particleEmitter);
   scene.add(particleGroup.mesh);
 
+  var enviro = flock.init();
+  var synth = flock.synth({
+    synthDef: {
+        ugen: "flock.ugen.filter.biquad.bp",
+        source: {
+            ugen: "flock.ugen.whiteNoise",
+            mul: 0.5
+        },
+        freq: {
+            ugen: "flock.ugen.mouse.cursor",
+            mul: 200,
+            add: 80,
+            options: {
+                interoplation: "exponential"
+            }
+        },
+        q: 1.5
+    }
+  });
+  enviro.play();
+
   var movingParticlesLeft = true;
 
   var models = [
