@@ -14,7 +14,7 @@ $(function() {
     renderer = new THREE.CanvasRenderer();
   }
 
-  renderer.setClearColor(0xcccccc, 1);
+  renderer.setClearColor(0xdddddd, 1);
   document.body.appendChild(renderer.domElement);
 
   var scene = new THREE.Scene();
@@ -46,14 +46,14 @@ $(function() {
   // Create a single particle emitter
   var particleEmitter = new SPE.Emitter({
       type: 'cube',
-      position: new THREE.Vector3(1, 9, -30),
+      position: new THREE.Vector3(1, 10, -30),
       positionSpread: new THREE.Vector3(5, 0, 5),
 
       acceleration: new THREE.Vector3(0, -5, 0),
       accelerationSpread: new THREE.Vector3(2, 2, 2),
 
       velocity: new THREE.Vector3(0, -5, 0),
-      velocitySpread: new THREE.Vector3(8, 7, 8),
+      velocitySpread: new THREE.Vector3(10, 7, 10),
 
       particlesPerSecond: 100,
       sizeStart: 2,
@@ -74,21 +74,24 @@ $(function() {
   var movingParticlesLeft = true;
 
   var models = [
-    //'./models/bread.json',
     './models/martini.json',
-    //'./models/rootbeer.json',
-    './models/turkeyleg.json'
+    './models/martini.json',
+    './models/martini.json',
+
+    './models/turkeyleg.json',
+    './models/turkeyleg.json',
+    './models/turkeyleg.json',
+
+    './models/rootbeer.json',
+    './models/rootbeer.json',
+    './models/rootbeer.json'
   ];
   var modelCache = {};
 
   var raindrops = [];
   var groundlings = [];
 
-  setTimeout(function() {
-    setInterval(function() {
-      addRaindrop();
-    }, 200);
-  }, 3000);
+  var frameCount = 0;
 
   render();
 
@@ -100,6 +103,11 @@ $(function() {
 
   function render() {
     requestAnimationFrame(render);
+
+    frameCount += 1;
+    if (frameCount > 3 * 50 && frameCount % 12 == 0) {
+      addRaindrop();
+    }
 
     for (var i = 0; i < raindrops.length; i++) {
       var raindrop = raindrops[i];
@@ -146,6 +154,13 @@ $(function() {
 
       mesh.userData.raining = true;
       mesh.userData.rainSpeed = Math.random() * 0.12 + 0.02;
+
+      if (model === './models/whisky.json') {
+        var color = new THREE.Color(0x666666);
+        material.color = color;
+        material.ambient = color;
+        material.emissive = color;
+      }
 
       raindrops.push(mesh);
       if (raindrops.length > 60) {
