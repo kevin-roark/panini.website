@@ -14,7 +14,7 @@ $(function() {
     renderer = new THREE.CanvasRenderer();
   }
 
-  renderer.setClearColor(0xffffff, 1);
+  renderer.setClearColor(0xdddddd, 1);
   document.body.appendChild(renderer.domElement);
 
   var scene = new THREE.Scene();
@@ -35,20 +35,63 @@ $(function() {
   $(window).resize(resize);
   resize();
 
+  var clock = new THREE.Clock();
+
+  // Create a particle group to add the emitter to.
+  var particleGroup = new SPE.Group({
+      texture: THREE.ImageUtils.loadTexture('./water.jpg'),
+      maxAge: 5 // live for 5 seconds
+  });
+
+  // Create a single particle emitter
+  var particleEmitter = new SPE.Emitter({
+      type: 'cube',
+      position: new THREE.Vector3(1, 10, -30),
+      positionSpread: new THREE.Vector3(5, 0, 5),
+
+      acceleration: new THREE.Vector3(0, -5, 0),
+      accelerationSpread: new THREE.Vector3(2, 2, 2),
+
+      velocity: new THREE.Vector3(0, -5, 0),
+      velocitySpread: new THREE.Vector3(10, 7, 10),
+
+      particlesPerSecond: 100,
+      sizeStart: 2,
+      sizeEnd: 0,
+      opacityStart: 1,
+      opacityEnd: 0,
+
+      colorStart: new THREE.Color('blue'),
+      colorEnd: new THREE.Color('white'),
+      colorStartSpread: new THREE.Vector3(1, 1, 1),
+
+      particleCount: 2000
+  });
+
+  particleGroup.addEmitter(particleEmitter);
+  scene.add(particleGroup.mesh);
+
+  var movingParticlesLeft = true;
+
   var models = [
-    //'./models/bread.json',
     './models/martini.json',
-    //'./models/rootbeer.json',
-    './models/turkeyleg.json'
+    './models/martini.json',
+    './models/martini.json',
+
+    './models/turkeyleg.json',
+    './models/turkeyleg.json',
+    './models/turkeyleg.json',
+
+    './models/rootbeer.json',
+    './models/rootbeer.json',
+    './models/rootbeer.json'
   ];
   var modelCache = {};
 
   var raindrops = [];
   var groundlings = [];
 
-  setInterval(function() {
-    addRaindrop();
-  }, 200);
+  var frameCount = 0;
 
   render();
 
@@ -61,6 +104,11 @@ $(function() {
   function render() {
     requestAnimationFrame(render);
 
+    frameCount += 1;
+    if (frameCount > 3 * 50 && frameCount % 12 == 0) {
+      addRaindrop();
+    }
+
     for (var i = 0; i < raindrops.length; i++) {
       var raindrop = raindrops[i];
       if (raindrop.userData.raining) {
@@ -69,6 +117,23 @@ $(function() {
         if (raindrop.position.y <= -5) {
           raindrop.userData.raining = false;
         }
+      }
+    }
+
+    var time = performance.now();
+    var dt = clock.getDelta();
+    particleGroup.tick(dt);
+    prevTime = time;
+
+    if (movingParticlesLeft) {
+      particleEmitter.position.x -= 0.04;
+      if (particleEmitter.position.x < -10) {
+        movingParticlesLeft = !movingParticlesLeft;
+      }
+    } else {
+      particleEmitter.position.x += 0.04;
+      if (particleEmitter.position.x > 10) {
+        movingParticlesLeft = !movingParticlesLeft;
       }
     }
 
@@ -84,18 +149,25 @@ $(function() {
       scene.add(mesh);
 
       mesh.position.x = kt.randInt(-12, 12);
-      mesh.position.y = kt.randInt(15, 20);
+      mesh.position.y = kt.randInt(10, 13);
       mesh.position.z = -1 * kt.randInt(19, 30);
 
       mesh.userData.raining = true;
       mesh.userData.rainSpeed = Math.random() * 0.12 + 0.02;
+
+      if (model === './models/whisky.json') {
+        var color = new THREE.Color(0x666666);
+        material.color = color;
+        material.ambient = color;
+        material.emissive = color;
+      }
 
       raindrops.push(mesh);
       if (raindrops.length > 60) {
         var oldMesh = raindrops.shift();
 
         groundlings.push(oldMesh);
-        if (groundlings.length > 250) {
+        if (groundlings.length > 120) {
           var finishedMesh = groundlings.shift();
           scene.remove(finishedMesh);
         }
