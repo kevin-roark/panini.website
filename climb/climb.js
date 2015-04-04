@@ -3,7 +3,12 @@ var STEP_PADDING = 10;
 var ME_PADDING = 20;
 var STEP_HEIGHT = Math.round((view.size.height - STEP_PADDING * 2) / 16);
 var STEP_LENGTH = Math.round((view.size.width - STEP_PADDING * 2) / 16);
-console.log('length: ' + STEP_LENGTH + ' / height: ' + STEP_HEIGHT);
+
+var regularBackgroundColor = {r: 213, g: 245, b: 232};
+var pulseBackgroundColor = {r: 195, g: 119, b: 233};
+var currentBackgroundColor = JSON.parse(JSON.stringify(regularBackgroundColor));
+var targetBackgroundColor = JSON.parse(JSON.stringify(pulseBackgroundColor));
+var currentColorDelta = colorDelta(currentBackgroundColor, targetBackgroundColor, 30);
 
 var animating = false;
 var animatingForward = true;
@@ -40,6 +45,7 @@ function iterate(forward, speed) {
         me.position.x += 1;
         if (me.position.x % STEP_LENGTH === 0) {
           nextForwardMove = 'y';
+          i = speed;
         }
         else {
           nextBackwardMove = 'x';
@@ -51,6 +57,7 @@ function iterate(forward, speed) {
         me.position.y -= 1;
         if ((view.size.height - STEP_PADDING * 2 - me.position.y) % STEP_HEIGHT === 0) {
           nextForwardMove = 'x';
+          i = speed;
         }
         else {
           nextBackwardMove = 'y';
@@ -64,6 +71,7 @@ function iterate(forward, speed) {
         me.position.x -= 1;
         if (me.position.x % STEP_LENGTH === 0) {
           nextBackwardMove = 'y';
+          i = speed;
         }
         else {
           nextForwardMove = 'x';
@@ -75,6 +83,7 @@ function iterate(forward, speed) {
         me.position.y += 1;
         if ((view.size.height - STEP_PADDING * 2 - me.position.y) % STEP_HEIGHT === 0) {
           nextBackwardMove = 'x';
+          i = speed;
         }
         else {
           nextForwardMove = 'y';
@@ -94,13 +103,25 @@ function onFrame(event) {
     else if (!animatingForward && me.position.x <= animationThreshold) {
       animating = false;
     }
+
+    if (colorsAreEqual(currentBackgroundColor, targetBackgroundColor)) {
+      targetBackgroundColor = colorsAreEqual(targetBackgroundColor, regularBackgroundColor)? pulseBackgroundColor : regularBackgroundColor;
+      currentColorDelta = colorDelta(currentBackgroundColor, targetBackgroundColor, 30);
+    } else {
+      currentBackgroundColor.r += currentColorDelta.r;
+      currentBackgroundColor.g += currentColorDelta.g;
+      currentBackgroundColor.b += currentColorDelta.b;
+    }
+
+    var color = rgb(currentBackgroundColor);
+    document.body.style.backgroundColor = color;
   }
   else {
-    if (view.size.width - me.position.x <= 15) {
+    if (view.size.width - me.position.x <= 10) {
       animating = true;
       animatingForward = false;
     }
-    else if (view.size.height - me.position.y <= 15) {
+    else if (view.size.height - me.position.y <= 10) {
       animating = true;
       animatingForward = true;
     }
@@ -117,4 +138,22 @@ function onKeyDown(event) {
   } else if (event.key == 'left') {
     iterate(false, 1);
   }
+}
+
+function colorsAreEqual(color1, color2) {
+  return Math.abs(color1.r - color2.r) < 1 &&
+         Math.abs(color1.g - color2.g) < 1 &&
+         Math.abs(color1.b - color2.b) < 1;
+}
+
+function colorDelta(color1, color2, steps) {
+  return {
+    r: (color2.r - color1.r) / steps,
+    g: (color2.g - color1.g) / steps,
+    b: (color2.b - color1.b) / steps
+  };
+}
+
+function rgb(color) {
+  return 'rgb(' + Math.round(color.r) + ',' + Math.round(color.g) + ',' + Math.round(color.b) + ')';
 }
