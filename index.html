@@ -5,7 +5,10 @@
 </head>
 <body>
     <script>
-      if (Math.random() <= 0.5) {
+      var p = Math.random();
+      if (p <= 0.55) {
+        window.location = '/climb';
+      } else if (p <= 0.85) {
         window.location = '/mirror';
       } else {
         window.location = '/panini';
