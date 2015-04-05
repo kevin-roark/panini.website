@@ -134,9 +134,9 @@ function onKeyDown(event) {
   }
 
   if (event.key == 'right') {
-    iterate(true, 1);
+    iterate(true, 2);
   } else if (event.key == 'left') {
-    iterate(false, 1);
+    iterate(false, 2);
   }
 }
 
