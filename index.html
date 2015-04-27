@@ -9,17 +9,82 @@
     <meta property="og:image" content="http://luminal.space/luminal_climb.png"/>
     <meta property="og:url" content="http://luminal.space/"/>
     <meta property="fb:admins" content="100000919641751"/>
+
+    <style>
+      body {
+        margin: 0px 20px;
+        max-width: 400px;
+      }
+
+      a {
+        color: #4a99ef;
+        text-decoration: none;
+      }
+        a:hover {
+          color: #1676f5;
+        }
+
+      #retrospective-text {
+        font-size: 30px;
+        line-height: 45px;
+        margin-bottom: 40px;
+      }
+
+      #catalogue-link-container {
+        margin: 80px 0px 50px 0px;
+      }
+
+      #catalogue-link {
+        padding: 10px 20px;
+        background-color: #ffde7b;
+        font-size: 32px;
+      }
+
+      #web-links-container {
+        margin-top: 80px;
+        margin-bottom: 20px;
+        padding: 10px 5px 5px 10px;
+        background-color: #fff2fa;
+        color: #464646;
+      }
+
+      #web-links-header {
+        font-size: 26px;
+        margin-bottom: 8px;
+      }
+
+      .web-link {
+        margin-left: 15px;
+        margin-bottom: 8px;
+        font-size: 19px;
+      }
+
+      #thanks-panini {
+        margin-left: 20px;
+      }
+    </style>
 </head>
 <body>
-    <script>
-      var p = Math.random();
-      if (p <= 0.55) {
-        window.location = '/climb';
-      } else if (p <= 0.85) {
-        window.location = '/mirror';
-      } else {
-        window.location = '/panini';
-      }
-    </script>
+    <div id="retrospective-text">
+      <p>
+        Luminal.space was a public installation on Columbia University's Low Steps.
+        It was visible from 10 AM - midnight on April 13, 2015.
+      </p>
+    </div>
+    <div id="catalogue-link-container">
+      <a id="catalogue-link" href="luminal-space-catalogue.pdf">Read the catalogue</a>
+    </div>
+    <div id="web-links-container">
+      <div id="web-links-header">Web Materials</div>
+      <div class="web-link">
+        <a id="mirror-link" href="mirror">mirror</a>
+      </div>
+      <div class="web-link">
+        <a id="panini-link" href="panini">panini</a> <span id="thanks-panini">(thank you Panini D'Parma)</span>
+      </div>
+      <div class="web-link">
+        <a id="climb-link" href="climb">stairway</a>
+      </div>
+    </div>
 </body>
 </html>
